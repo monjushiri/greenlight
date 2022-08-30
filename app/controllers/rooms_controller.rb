@@ -239,9 +239,22 @@ class RoomsController < ApplicationController
   def preupload_presentation
     begin
       raise "Invalid file type" unless valid_file_type
-      @room.presentation.attach(room_params[:presentation])
 
-      flash[:success] = I18n.t("room.preupload_success")
+      presentation_exceeds_max_size = false
+      if ENV['MAX_PRESENTATION_SiZE'].present?
+        max_presentation_size = ENV['MAX_PRESENTATION_SiZE']
+        size_of_presentation = (room_params[:presentation].size.to_f / 2**20).round(3)
+        logger.info "Attempt to upload presentation of size #{size_of_presentation} MB"
+
+        presentation_exceeds_max_size = size_of_presentation > max_presentation_size.to_i
+        flash[:alert] = I18n.t("room.preupload_presentation_exceeds_max_size",
+                                 max_presentation_size: max_presentation_size) if presentation_exceeds_max_size
+      end
+
+      unless presentation_exceeds_max_size
+        @room.presentation.attach(room_params[:presentation])
+        flash[:success] = I18n.t("room.preupload_success")
+      end
     rescue => e
       logger.error "Support: Error in updating room presentation: #{e}"
       flash[:alert] = I18n.t("room.preupload_error")

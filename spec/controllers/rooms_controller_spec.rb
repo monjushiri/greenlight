@@ -953,6 +953,7 @@ describe RoomsController, type: :controller do
     before do
       @user = create(:user)
       @file = fixture_file_upload('files/sample.pdf', 'application/pdf')
+      @big_file = fixture_file_upload('files/bigSample.pdf', 'application/pdf')
       @invalid_file = fixture_file_upload('files/invalid.bmp', 'image/bmp')
       allow(Rails.configuration).to receive(:preupload_presentation_default).and_return("true")
     end
@@ -971,6 +972,17 @@ describe RoomsController, type: :controller do
       @request.session[:user_id] = @user.id
 
       post :preupload_presentation, params: { room_uid: @user.main_room, room: { presentation: @invalid_file } }
+
+      expect(@user.main_room.presentation.attached?).to be false
+      expect(flash[:alert]).to be_present
+      expect(response).to redirect_to @user.main_room
+    end
+
+    it "rejects presentations that exceed the max file size" do
+      @request.session[:user_id] = @user.id
+      ENV['MAX_PRESENTATION_SiZE'] = '1'
+
+      post :preupload_presentation, params: { room_uid: @user.main_room, room: { presentation: @big_file } }
 
       expect(@user.main_room.presentation.attached?).to be false
       expect(flash[:alert]).to be_present

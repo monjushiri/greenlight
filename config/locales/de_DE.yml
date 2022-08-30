@@ -611,6 +611,7 @@ de_DE:
     no_sessions: In diesem Raum haben noch keine Konferenzen stattgefunden.
     preupload_success: Präsentation erfolgreich hinzugefügt
     preupload_error: Es gab einen Fehler bei der Aktualisierung der Raumpräsentation
+    preupload_presentation_exceeds_max_size: Die Raumpräsentation überschreitet die maximal zulässige Größe von %{max_presentation_size} MB
     preupload_remove_success: Präsentation erfolgreich entfernt
     preupload_remove_error: Es gab einen Fehler beim Entfernen der Raumpräsentation
     recordings: Aufzeichnungen des Raums

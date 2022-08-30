@@ -612,6 +612,7 @@ en:
     no_sessions: This room has no sessions, yet!
     preupload_success: Successfully added presentation
     preupload_error: There was an error updating the room presentation
+    preupload_presentation_exceeds_max_size: The presentation you want to upload exceeds the maximal size of %{max_presentation_size} MB
     preupload_remove_success: Successfully removed presentation
     preupload_remove_error: There was an error removing the room presentation
     recordings: Room Recordings
